@@ -169,9 +169,10 @@ document.getElementById('start-btn').addEventListener('click', async () => {
 });
 
 // ── Game ─────────────────────────────────────────────────────
-let dragAnswerSetup = false;
+let currentQuestionIndex = 0; // needed by touch handlers on the card
 
 function renderGame(state) {
+  currentQuestionIndex = state.currentQuestion;
   showScreen('game');
 
   const q   = QUESTIONS[state.currentQuestion];
@@ -230,6 +231,7 @@ function setupDragCard(card) {
   const fresh = card.cloneNode(true);
   card.parentNode.replaceChild(fresh, card);
 
+  // Desktop: mouse drag-and-drop
   fresh.addEventListener('dragstart', e => {
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', 'question-card');
@@ -237,7 +239,32 @@ function setupDragCard(card) {
   });
   fresh.addEventListener('dragend', () => {
     fresh.classList.remove('dragging');
+    document.querySelectorAll('.answer-zone').forEach(z => z.classList.remove('drag-over'));
   });
+
+  // Mobile: touch drag — prevents page scroll, highlights zone under finger
+  fresh.addEventListener('touchstart', e => {
+    e.preventDefault();
+    fresh.classList.add('dragging');
+  }, { passive: false });
+
+  fresh.addEventListener('touchmove', e => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    document.querySelectorAll('.answer-zone').forEach(z => z.classList.remove('drag-over'));
+    document.elementFromPoint(touch.clientX, touch.clientY)
+      ?.closest('.answer-zone')
+      ?.classList.add('drag-over');
+  }, { passive: false });
+
+  fresh.addEventListener('touchend', e => {
+    e.preventDefault();
+    fresh.classList.remove('dragging');
+    const touch = e.changedTouches[0];
+    const zone = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.answer-zone');
+    document.querySelectorAll('.answer-zone').forEach(z => z.classList.remove('drag-over'));
+    if (zone) submitAnswer(zone.dataset.answer, currentQuestionIndex);
+  }, { passive: false });
 }
 
 async function submitAnswer(answer, questionIndex) {
@@ -262,9 +289,18 @@ function setupDropZone(zone, questionIndex) {
     if (payload !== 'question-card') return;
     await submitAnswer(zone.dataset.answer, questionIndex);
   });
+  // Desktop click
   zone.addEventListener('click', () => {
     submitAnswer(zone.dataset.answer, questionIndex);
   });
+  // Mobile tap — preventDefault stops the subsequent synthetic click (no double-fire)
+  zone.addEventListener('touchend', e => {
+    // Only handle direct taps; card-drag touchend fires on the card, not here
+    if (!document.getElementById('question-card')?.classList.contains('dragging')) {
+      e.preventDefault();
+      submitAnswer(zone.dataset.answer, questionIndex);
+    }
+  }, { passive: false });
 }
 
 document.getElementById('show-results-btn').addEventListener('click', async () => {

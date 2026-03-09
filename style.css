@@ -138,6 +138,7 @@ h2 { font-size: 1.4rem; color: #3a0ca3; }
   text-align: center;
   cursor: grab;
   user-select: none;
+  touch-action: none;
   box-shadow: 0 6px 20px rgba(114,9,183,.35);
   transition: transform .15s, box-shadow .15s, opacity .2s;
   max-width: 400px;
