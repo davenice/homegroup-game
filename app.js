@@ -29,8 +29,11 @@ const db  = getFirestore(app);
 // QUESTIONS  (hardcoded — add more here as needed)
 // ─────────────────────────────────────────────────────────────────────────────
 const QUESTIONS = [
-  { text: 'Is a tomato a fruit or vegetable?', answers: ['Fruit', 'Vegetable'] },
-  { text: 'Is a wolf a dog or a cat?',          answers: ['Dog', 'Cat'] },
+  { text: 'God wants you to be happy, and if you\'re not happy in this relationship, that\'s all the answer you need. He wouldn\'t want you to stay somewhere you\'re struggling.', answers: ['True prophet', 'False prophet'] },
+  { text: 'Sow a seed of faith today and God will multiply it back to you. Your financial breakthrough is directly connected to your willingness to give.', answers: ['True prophet', 'False prophet'] },
+  { text: 'I want to be honest — I\'m not sure I have a word of comfort for you right now. What I keep coming back to in Scripture is an invitation to repentance, not reassurance.', answers: ['True prophet', 'False prophet'] },
+  { text: 'You\'ve been through enough. God is not asking anything more of you right now — just rest. There\'s nothing to change, nothing to address. He\'s proud of you exactly as you are.', answers: ['True prophet', 'False prophet'] },
+  { text: 'I wish I had easier news. But I think the faithful thing is to tell you that what you\'re describing isn\'t a circumstance to be prayed away — it\'s a pattern to be repented of.', answers: ['True prophet', 'False prophet'] },
 ];
 
 const GAME_DOC = doc(db, 'games', 'game1');
