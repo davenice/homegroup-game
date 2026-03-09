@@ -1,0 +1,240 @@
+/* ── Reset & base ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #f0f4ff;
+  color: #1a1a2e;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Screens ──────────────────────────────────────────────── */
+.screen {
+  display: none;
+  width: 100%;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+.screen.active { display: flex; }
+
+/* ── Card (centred content box) ───────────────────────────── */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,.1);
+  width: min(480px, 92vw);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  align-items: center;
+  text-align: center;
+}
+
+h1 { font-size: 2rem; color: #3a0ca3; }
+h2 { font-size: 1.4rem; color: #3a0ca3; }
+.subtitle { color: #555; }
+
+/* ── Join screen ──────────────────────────────────────────── */
+#player-name {
+  width: 100%;
+  padding: .75rem 1rem;
+  border: 2px solid #d0d0e8;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  outline: none;
+  transition: border-color .2s;
+}
+#player-name:focus { border-color: #7209b7; }
+
+.host-label {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .95rem;
+  color: #444;
+  cursor: pointer;
+}
+.host-label input[type=checkbox] { width: 18px; height: 18px; cursor: pointer; }
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn {
+  padding: .75rem 2rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .1s, box-shadow .1s;
+}
+.btn:active { transform: scale(.97); }
+
+.btn-primary {
+  background: #7209b7;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(114,9,183,.3);
+}
+.btn-primary:hover { background: #560bad; }
+
+.btn-secondary {
+  background: #f3f0ff;
+  color: #7209b7;
+  border: 2px solid #7209b7;
+}
+.btn-secondary:hover { background: #e9e2ff; }
+
+/* ── Waiting screen ───────────────────────────────────────── */
+.label { font-weight: 600; color: #444; margin-bottom: .25rem; }
+
+#player-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  justify-content: center;
+  margin-top: .25rem;
+}
+#player-list li {
+  background: #f0e6ff;
+  color: #3a0ca3;
+  padding: .35rem .9rem;
+  border-radius: 20px;
+  font-size: .9rem;
+  font-weight: 500;
+}
+#player-list li.is-you { background: #7209b7; color: #fff; }
+
+/* ── Game screen ──────────────────────────────────────────── */
+.game-layout {
+  width: min(640px, 96vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem 1rem;
+}
+
+.question-number { font-size: .9rem; color: #888; font-weight: 500; letter-spacing: .05em; }
+
+/* Question card */
+#question-card-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  min-height: 80px;
+}
+
+#question-card {
+  background: #7209b7;
+  color: #fff;
+  border-radius: 14px;
+  padding: 1.1rem 1.8rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: grab;
+  user-select: none;
+  box-shadow: 0 6px 20px rgba(114,9,183,.35);
+  transition: transform .15s, box-shadow .15s, opacity .2s;
+  max-width: 400px;
+}
+#question-card:active { cursor: grabbing; }
+#question-card.dragging { opacity: .5; transform: scale(1.04); }
+#question-card.answered { cursor: default; opacity: .6; }
+
+/* Answer zones */
+#answer-zones {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.answer-zone {
+  flex: 1;
+  min-width: 140px;
+  max-width: 220px;
+  min-height: 100px;
+  border: 3px dashed #c0b8e8;
+  border-radius: 14px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
+  padding: 1rem;
+  transition: border-color .15s, background .15s;
+  text-align: center;
+}
+.answer-zone .zone-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #3a0ca3;
+}
+.answer-zone.drag-over {
+  border-color: #7209b7;
+  background: #f3e8ff;
+}
+.answer-zone.chosen {
+  border-color: #7209b7;
+  background: #ede0ff;
+}
+/* Question card when dropped inside zone */
+.answer-zone .question-card-dropped {
+  background: #7209b7;
+  color: #fff;
+  border-radius: 10px;
+  padding: .6rem 1rem;
+  font-size: .9rem;
+  font-weight: 600;
+  text-align: center;
+  max-width: 100%;
+}
+
+.drag-hint { font-size: .85rem; color: #aaa; }
+.drag-hint.hidden { visibility: hidden; }
+
+/* Admin panel */
+.admin-panel { margin-top: .5rem; }
+
+/* ── Results screen ───────────────────────────────────────── */
+#results-bars {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: .5rem;
+}
+
+.result-row { width: 100%; }
+.result-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: .95rem;
+  font-weight: 600;
+  color: #3a0ca3;
+  margin-bottom: .3rem;
+}
+.result-bar-bg {
+  background: #e8e2ff;
+  border-radius: 99px;
+  height: 24px;
+  overflow: hidden;
+}
+.result-bar-fill {
+  height: 100%;
+  background: #7209b7;
+  border-radius: 99px;
+  transition: width .6s ease;
+  min-width: 4px;
+}
+
+/* ── Utilities ────────────────────────────────────────────── */
+.hidden { display: none !important; }
+.error { color: #d62828; font-size: .9rem; }
