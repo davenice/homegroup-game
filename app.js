@@ -196,14 +196,12 @@ function renderGame(state) {
     label.textContent = answer;
     zone.appendChild(label);
 
-    if (!myAnswer) {
-      zone.addEventListener('click', () => submitAnswer(answer, state.currentQuestion));
-    }
+    zone.addEventListener('click', () => submitAnswer(answer, state.currentQuestion));
 
     zonesEl.appendChild(zone);
   });
 
-  hintEl.classList.toggle('hidden', !!myAnswer);
+  hintEl.classList.remove('hidden');
 
   const answered = Object.keys(state.answers?.[state.currentQuestion] || {}).length;
   const total    = Object.keys(state.players || {}).length;
