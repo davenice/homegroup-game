@@ -171,6 +171,11 @@ h2 { font-size: 1.4rem; color: #3a0ca3; }
   padding: 1rem;
   transition: border-color .15s, background .15s;
   text-align: center;
+  cursor: pointer;
+}
+.answer-zone:hover:not(.chosen) {
+  border-color: #7209b7;
+  background: #faf5ff;
 }
 .answer-zone .zone-label {
   font-size: 1.1rem;

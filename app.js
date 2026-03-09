@@ -207,7 +207,7 @@ function renderGame(state) {
       zone.appendChild(dropped);
     }
 
-    setupDropZone(zone);
+    setupDropZone(zone, state.currentQuestion);
     zonesEl.appendChild(zone);
   });
 
@@ -240,7 +240,13 @@ function setupDragCard(card) {
   });
 }
 
-function setupDropZone(zone) {
+async function submitAnswer(answer, questionIndex) {
+  await updateDoc(GAME_DOC, {
+    [`answers.${questionIndex}.${playerId}`]: answer,
+  });
+}
+
+function setupDropZone(zone, questionIndex) {
   zone.addEventListener('dragover', e => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
@@ -254,15 +260,10 @@ function setupDropZone(zone) {
     zone.classList.remove('drag-over');
     const payload = e.dataTransfer.getData('text/plain');
     if (payload !== 'question-card') return;
-
-    const answer = zone.dataset.answer;
-    const snap   = await getDoc(GAME_DOC);
-    const state  = snap.data();
-    const qi     = state.currentQuestion;
-
-    await updateDoc(GAME_DOC, {
-      [`answers.${qi}.${playerId}`]: answer,
-    });
+    await submitAnswer(zone.dataset.answer, questionIndex);
+  });
+  zone.addEventListener('click', () => {
+    submitAnswer(zone.dataset.answer, questionIndex);
   });
 }
 
