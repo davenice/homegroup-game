@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz Game</title>
+  <title>Test the Spirits</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,13 +14,15 @@
   <!-- JOIN SCREEN -->
   <div id="join-screen" class="screen active">
     <div class="card">
-      <h1>Quiz Game</h1>
+      <p class="crown">&#9768;</p>
+      <h1>Test the Spirits</h1>
+      <p class="scripture">1 John 4:1</p>
       <p class="subtitle">Enter your name to join</p>
       <input type="text" id="player-name" placeholder="Your name" maxlength="20" autocomplete="off">
       <label class="host-label">
         <input type="checkbox" id="is-host"> I am the host
       </label>
-      <button id="join-btn" class="btn btn-primary">Join Game</button>
+      <button id="join-btn" class="btn btn-primary">Enter</button>
       <p id="join-error" class="error hidden"></p>
     </div>
   </div>
@@ -25,12 +30,13 @@
   <!-- WAITING SCREEN -->
   <div id="waiting-screen" class="screen">
     <div class="card">
-      <h2>Waiting for the game to start…</h2>
+      <p class="crown">&#9768;</p>
+      <h2>Waiting for the host…</h2>
       <div id="player-list-container">
-        <p class="label">Players joined:</p>
+        <p class="label">Those who have gathered:</p>
         <ul id="player-list"></ul>
       </div>
-      <button id="start-btn" class="btn btn-primary admin-only hidden">Start Game</button>
+      <button id="start-btn" class="btn btn-primary admin-only hidden">Begin</button>
     </div>
   </div>
 
@@ -39,14 +45,15 @@
     <div class="game-layout">
       <p id="question-number" class="question-number"></p>
 
-      <p id="question-text" class="question-text"></p>
+      <p class="prompt">Someone says…</p>
+      <blockquote id="question-text" class="question-text"></blockquote>
 
-      <p class="hint" id="drag-hint">Tap an answer to choose it</p>
+      <p class="hint" id="drag-hint">Who said this?</p>
 
       <div id="answer-zones"></div>
 
       <div class="admin-panel admin-only hidden">
-        <button id="show-results-btn" class="btn btn-secondary">Show Results</button>
+        <button id="show-results-btn" class="btn btn-secondary">Reveal Results</button>
       </div>
     </div>
   </div>
@@ -57,7 +64,7 @@
       <h2 id="results-question-text"></h2>
       <div id="results-bars"></div>
       <div class="admin-panel admin-only hidden">
-        <button id="next-question-btn" class="btn btn-primary">Next Question</button>
+        <button id="next-question-btn" class="btn btn-primary">Next</button>
       </div>
     </div>
   </div>
@@ -65,8 +72,9 @@
   <!-- DONE SCREEN -->
   <div id="done-screen" class="screen">
     <div class="card">
-      <h1>Game Over!</h1>
-      <p class="subtitle">Thanks for playing.</p>
+      <p class="crown">&#9768;</p>
+      <h1>The spirits have been tested.</h1>
+      <p class="scripture">Well done, good and faithful servant.</p>
     </div>
   </div>
 
