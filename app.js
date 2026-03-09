@@ -204,6 +204,10 @@ function renderGame(state) {
   });
 
   hintEl.classList.toggle('hidden', !!myAnswer);
+
+  const answered = Object.keys(state.answers?.[state.currentQuestion] || {}).length;
+  const total    = Object.keys(state.players || {}).length;
+  document.getElementById('answer-count').textContent = `${answered} of ${total} answered`;
 }
 
 async function submitAnswer(answer, questionIndex) {

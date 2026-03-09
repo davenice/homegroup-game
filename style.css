@@ -250,7 +250,18 @@ blockquote.question-text::after  { content: '\201D'; margin-left: .1em; }
 .hint.hidden { visibility: hidden; }
 
 /* Admin panel */
-.admin-panel { margin-top: .5rem; }
+.admin-panel {
+  margin-top: .5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+}
+.answer-count {
+  font-size: .85rem;
+  color: #9a8060;
+  letter-spacing: .05em;
+}
 
 /* ── Results screen ───────────────────────────────────────── */
 #results-bars {
