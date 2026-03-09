@@ -169,29 +169,23 @@ document.getElementById('start-btn').addEventListener('click', async () => {
 });
 
 // ── Game ─────────────────────────────────────────────────────
-let currentQuestionIndex = 0; // needed by touch handlers on the card
-
 function renderGame(state) {
-  currentQuestionIndex = state.currentQuestion;
   showScreen('game');
 
-  const q   = QUESTIONS[state.currentQuestion];
-  const qEl = document.getElementById('question-text');
+  const q     = QUESTIONS[state.currentQuestion];
   const numEl = document.getElementById('question-number');
   const hintEl = document.getElementById('drag-hint');
 
   numEl.textContent = `Question ${state.currentQuestion + 1} of ${QUESTIONS.length}`;
-  qEl.textContent   = q.text;
+  document.getElementById('question-text').textContent = q.text;
 
-  // Check if this player already answered
   const myAnswer = (state.answers?.[state.currentQuestion] || {})[playerId];
 
-  // Build answer zones (only once per question change)
   const zonesEl = document.getElementById('answer-zones');
   zonesEl.innerHTML = '';
   q.answers.forEach(answer => {
     const zone = document.createElement('div');
-    zone.className = 'answer-zone';
+    zone.className = 'answer-zone' + (myAnswer === answer ? ' chosen' : '');
     zone.dataset.answer = answer;
 
     const label = document.createElement('div');
@@ -199,108 +193,20 @@ function renderGame(state) {
     label.textContent = answer;
     zone.appendChild(label);
 
-    if (myAnswer === answer) {
-      // Show card already placed here
-      zone.classList.add('chosen');
-      const dropped = document.createElement('div');
-      dropped.className = 'question-card-dropped';
-      dropped.textContent = q.text;
-      zone.appendChild(dropped);
+    if (!myAnswer) {
+      zone.addEventListener('click', () => submitAnswer(answer, state.currentQuestion));
     }
 
-    setupDropZone(zone, state.currentQuestion);
     zonesEl.appendChild(zone);
   });
 
-  // Hide or show the question card
-  const card = document.getElementById('question-card');
-  if (myAnswer) {
-    card.classList.add('answered');
-    card.setAttribute('draggable', 'false');
-    hintEl.classList.add('hidden');
-  } else {
-    card.classList.remove('answered');
-    card.setAttribute('draggable', 'true');
-    hintEl.classList.remove('hidden');
-    setupDragCard(card);
-  }
-}
-
-function setupDragCard(card) {
-  // Remove previous listeners by cloning
-  const fresh = card.cloneNode(true);
-  card.parentNode.replaceChild(fresh, card);
-
-  // Desktop: mouse drag-and-drop
-  fresh.addEventListener('dragstart', e => {
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', 'question-card');
-    fresh.classList.add('dragging');
-  });
-  fresh.addEventListener('dragend', () => {
-    fresh.classList.remove('dragging');
-    document.querySelectorAll('.answer-zone').forEach(z => z.classList.remove('drag-over'));
-  });
-
-  // Mobile: touch drag — prevents page scroll, highlights zone under finger
-  fresh.addEventListener('touchstart', e => {
-    e.preventDefault();
-    fresh.classList.add('dragging');
-  }, { passive: false });
-
-  fresh.addEventListener('touchmove', e => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    document.querySelectorAll('.answer-zone').forEach(z => z.classList.remove('drag-over'));
-    document.elementFromPoint(touch.clientX, touch.clientY)
-      ?.closest('.answer-zone')
-      ?.classList.add('drag-over');
-  }, { passive: false });
-
-  fresh.addEventListener('touchend', e => {
-    e.preventDefault();
-    fresh.classList.remove('dragging');
-    const touch = e.changedTouches[0];
-    const zone = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.answer-zone');
-    document.querySelectorAll('.answer-zone').forEach(z => z.classList.remove('drag-over'));
-    if (zone) submitAnswer(zone.dataset.answer, currentQuestionIndex);
-  }, { passive: false });
+  hintEl.classList.toggle('hidden', !!myAnswer);
 }
 
 async function submitAnswer(answer, questionIndex) {
   await updateDoc(GAME_DOC, {
     [`answers.${questionIndex}.${playerId}`]: answer,
   });
-}
-
-function setupDropZone(zone, questionIndex) {
-  zone.addEventListener('dragover', e => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    zone.classList.add('drag-over');
-  });
-  zone.addEventListener('dragleave', () => {
-    zone.classList.remove('drag-over');
-  });
-  zone.addEventListener('drop', async e => {
-    e.preventDefault();
-    zone.classList.remove('drag-over');
-    const payload = e.dataTransfer.getData('text/plain');
-    if (payload !== 'question-card') return;
-    await submitAnswer(zone.dataset.answer, questionIndex);
-  });
-  // Desktop click
-  zone.addEventListener('click', () => {
-    submitAnswer(zone.dataset.answer, questionIndex);
-  });
-  // Mobile tap — preventDefault stops the subsequent synthetic click (no double-fire)
-  zone.addEventListener('touchend', e => {
-    // Only handle direct taps; card-drag touchend fires on the card, not here
-    if (!document.getElementById('question-card')?.classList.contains('dragging')) {
-      e.preventDefault();
-      submitAnswer(zone.dataset.answer, questionIndex);
-    }
-  }, { passive: false });
 }
 
 document.getElementById('show-results-btn').addEventListener('click', async () => {
