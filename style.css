@@ -68,6 +68,15 @@ h2 {
 }
 
 /* ── Join screen ──────────────────────────────────────────── */
+#join-form, #letmein-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  width: 100%;
+}
+#letmein-panel.hidden, #join-form.hidden { display: none; }
+
 #player-name {
   width: 100%;
   padding: .75rem 1rem;
@@ -120,6 +129,14 @@ h2 {
   border: 2px solid #c9973a;
 }
 .btn-secondary:hover { background: rgba(201,151,58,.1); }
+
+.btn-ghost {
+  background: transparent;
+  color: #6a5a7a;
+  font-size: .85rem;
+  padding: .4rem 1rem;
+}
+.btn-ghost:hover { color: #9a8060; }
 
 /* ── Waiting screen ───────────────────────────────────────── */
 .label { font-weight: 500; color: #9a8060; font-size: .85rem; text-transform: uppercase; letter-spacing: .08em; }

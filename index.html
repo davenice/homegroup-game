@@ -17,13 +17,23 @@
       <p class="crown">&#9768;</p>
       <h1>Test the Spirits</h1>
       <p class="scripture">1 John 4:1</p>
-      <p class="subtitle">Enter your name to join</p>
-      <input type="text" id="player-name" placeholder="Your name" maxlength="20" autocomplete="off">
-      <label class="host-label">
-        <input type="checkbox" id="is-host"> I am the host
-      </label>
-      <button id="join-btn" class="btn btn-primary">Enter</button>
-      <p id="join-error" class="error hidden"></p>
+
+      <div id="join-form">
+        <p class="subtitle">Enter your name to join</p>
+        <input type="text" id="player-name" placeholder="Your name" maxlength="20" autocomplete="off">
+        <label class="host-label">
+          <input type="checkbox" id="is-host"> I am the host
+        </label>
+        <button id="join-btn" class="btn btn-primary">Enter</button>
+        <p id="join-error" class="error hidden"></p>
+      </div>
+
+      <div id="letmein-panel" class="hidden">
+        <p class="subtitle">What would you like to do?</p>
+        <button id="reset-game-btn" class="btn btn-secondary">Reset Game</button>
+        <button id="takeover-host-btn" class="btn btn-secondary">Take Over as Host</button>
+        <button id="letmein-back-btn" class="btn btn-ghost">Cancel</button>
+      </div>
     </div>
   </div>
 

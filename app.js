@@ -83,6 +83,12 @@ async function handleJoin() {
 
   if (!name) { showError(errEl, 'Please enter your name.'); return; }
 
+  if (name.toLowerCase() === 'letmein') {
+    document.getElementById('join-form').classList.add('hidden');
+    document.getElementById('letmein-panel').classList.remove('hidden');
+    return;
+  }
+
   // Ensure the game document exists with default state
   const snap = await getDoc(GAME_DOC);
   if (!snap.exists()) {
@@ -116,6 +122,42 @@ async function handleJoin() {
 
   startListening();
 }
+
+function showLetmeinBack() {
+  document.getElementById('letmein-panel').classList.add('hidden');
+  document.getElementById('join-form').classList.remove('hidden');
+  document.getElementById('player-name').value = '';
+}
+
+document.getElementById('letmein-back-btn').addEventListener('click', showLetmeinBack);
+
+document.getElementById('reset-game-btn').addEventListener('click', async () => {
+  await setDoc(GAME_DOC, {
+    phase: 'waiting',
+    currentQuestion: 0,
+    adminId: null,
+    players: {},
+    answers: {},
+  });
+  showLetmeinBack();
+});
+
+document.getElementById('takeover-host-btn').addEventListener('click', async () => {
+  const snap = await getDoc(GAME_DOC);
+  if (!snap.exists()) {
+    await setDoc(GAME_DOC, {
+      phase: 'waiting',
+      currentQuestion: 0,
+      adminId: null,
+      players: {},
+      answers: {},
+    });
+  }
+  await updateDoc(GAME_DOC, { adminId: playerId });
+  isAdmin = true;
+  showLetmeinBack();
+  document.getElementById('is-host').checked = true;
+});
 
 function showError(el, msg) {
   el.textContent = msg;
