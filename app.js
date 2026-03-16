@@ -33,7 +33,7 @@ const QUESTIONS = [
   { text: 'What does James say happens to the person who looks in a mirror and walks away?', answers: ['They forget what they look like', 'They become proud of their appearance'] },
   { text: 'What does James say tames the tongue?', answers: ['Wisdom', 'Nothing — no human can tame it'] },
   { text: 'What kind of wisdom comes from heaven?', answers: ['Pure, peace-loving, and considerate', 'Bold, direct, and powerful'] },
-  { text: 'What does James say causes fights and quarrels among believers?', answers: ['Lack of Bible knowledge', 'Desires that battle within you'] },
+  { text: 'According to James 1, what is the "soil" for the word that is "planted in you" which can save you?', answers: ['The humility with which you accept it', 'The sincerity of faith you feel when you hear it'] },
 ];
 
 const GAME_DOC = doc(db, 'games', 'game1');
